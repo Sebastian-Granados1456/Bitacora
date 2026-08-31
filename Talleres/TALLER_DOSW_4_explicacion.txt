@@ -1,0 +1,166 @@
+EXPLICACIÓN — TALLER_DOSW_#4 (Patrones de Diseño Combinados)
+================================================================
+Fuente: "TALLER_DOSW_4_Patrones_Combinados.docx"
+Modalidad: individual (aunque el enunciado original está pensado
+para pareja, esta bitácora lo desarrolla como trabajo propio).
+
+Objetivo del taller: cada ejercicio presenta un caso real que combina
+EXACTAMENTE 2 patrones de diseño. Se identifica el rol de cada uno,
+cómo interactúan, y se implementa el esquema de clases resultante.
+
+Código: src/main/java/dosw/taller4_patrones/ejercicioNN_tema/
+Cada carpeta trae su propio Main.java ejecutable.
+
+Base teórica: cada uno de estos 10 patrones ya se explicó y resolvió
+de forma individual en "DOSW 1 - S03.pptx" (ver Slides/S03/
+explicacion.txt); aquí se combinan de a dos para un caso más completo.
+
+
+EJERCICIO #01 — Plataforma de Pagos Inteligentes
+----------------------------------------------------
+Patrones: Strategy + Factory Method
+  - Strategy: cada medio de pago (Tarjeta, PSE, Nequi, PayPal, Stripe)
+    es un algoritmo intercambiable detrás de PaymentStrategy.
+  - Factory Method: según el país (Colombia/USA), una Factory
+    distinta decide qué Strategy construir.
+Interacción: usuario elige país → Factory construye el gateway
+correcto → el Checkout llama strategy.process(amount) sin saber cuál
+es. El Checkout nunca cambia aunque se agreguen países o medios.
+Código: ejercicio01_pagos/
+
+
+EJERCICIO #02 — Sistema de Notificaciones Multicanal
+----------------------------------------------------------
+Patrones: Observer + Factory Method
+  - Observer: el Pedido (Subject) avisa a sus canales activos
+    (Email/SMS/Push) cuando cambia de estado, sin conocerlos.
+  - Factory Method: cada canal usa su propia Factory para construir
+    el mensaje en el formato correcto (HTML, texto plano, JSON).
+Interacción: Pedido cambia de estado → notifica a los Observers →
+cada uno llama a su Factory para construir el mensaje del canal →
+"envía".
+Código: ejercicio02_notificaciones/
+
+
+EJERCICIO #03 — Sistema de Reportes Empresariales
+-------------------------------------------------------
+Patrones: Template Method + Factory Method
+  - Template Method: ReportGenerator.generate() (método final) fija
+    el orden de 4 pasos; applyFormat()/exportFile() son abstractos.
+  - Factory Method: ReportFactory.create("PDF"/"EXCEL"/"CSV") decide
+    qué subclase instanciar.
+Interacción: cliente pide "reporte PDF" → Factory construye PdfReport
+→ cliente llama generate() → el esqueleto fijo ejecuta los 4 pasos
+usando la implementación PDF para los pasos variables.
+Código: ejercicio03_reportes/
+
+
+EJERCICIO #04 — Plataforma de Videojuegos — Personajes
+--------------------------------------------------------------
+Patrones: Builder + Decorator
+  - Builder: WarriorBuilder arma el personaje base paso a paso
+    (armadura, arma, habilidad) al inicio de la partida.
+  - Decorator: ShieldDecorator/SpeedDecorator/InvisibilityDecorator
+    envuelven el personaje con poderes temporales durante el juego.
+Interacción: Builder crea el personaje base configurable → Decorator
+lo envuelve con poderes → al terminar el efecto, el wrapper se
+descarta sin afectar la clase base.
+Código: ejercicio04_videojuego/
+
+
+EJERCICIO #05 — Integración con Sistema Bancario Antiguo
+------------------------------------------------------------------
+Patrones: Adapter + Facade
+  - Adapter: LegacyBankAdapter traduce PaymentProcessor.pay(amount)
+    hacia LegacyBankService.executeTransaction(cuenta, centavos).
+  - Facade: BankFacade.procesarPago(monto) esconde los pasos de
+    inicialización y delega en el Adapter.
+Interacción: desarrollador llama BankFacade.procesarPago(monto) →
+Facade inicializa contexto → delega al Adapter → Adapter traduce al
+formato legacy → LegacyBankService ejecuta. El desarrollador nunca
+toca LegacyBankService directamente.
+Código: ejercicio05_bancario/
+
+
+EJERCICIO #06 — Motor de Recomendaciones
+--------------------------------------------
+Patrones: Strategy + Observer
+  - Strategy: GenreStrategy/HistoryStrategy/PopularityStrategy son
+    algoritmos de recomendación intercambiables en tiempo real.
+  - Observer: HomePageComponent y SuggestedListComponent se
+    suscriben al perfil del usuario y reaccionan a cambios.
+Interacción: usuario cambia preferencias → el perfil (Subject)
+notifica a sus Observers → cada uno re-renderiza usando la nueva
+Strategy configurada.
+Código: ejercicio06_recomendaciones/
+
+
+EJERCICIO #07 — Flujo de Aprobación de Documentos
+-------------------------------------------------------
+Patrones: Chain of Responsibility + State
+  - Chain of Responsibility: AutorHandler → LiderHandler →
+    JuridicoHandler procesan el documento según su estado actual.
+  - State: DraftState/InReviewState/ApprovedState/RejectedState
+    ejecutan la transición correspondiente, eliminando switch/if.
+Interacción: un handler de la cadena invoca document.approve()/
+reject() → el State actual del documento decide a qué estado
+transicionar. El documento nunca sabe en qué estado está.
+Código: ejercicio07_documentos/
+
+
+EJERCICIO #08 — Sistema de Pedidos en Restaurante
+-------------------------------------------------------
+Patrones: Builder + Observer
+  - Builder: OrderBuilder arma el pedido paso a paso (tamaño, carne,
+    extras, acompañamientos) hasta un Order inmutable.
+  - Observer: KitchenService/BillingService/DeliveryService
+    reaccionan a order.confirm() sin que Order los conozca.
+Interacción: cliente configura con Builder → build() retorna un Order
+inmutable → order.confirm() notifica a todos los Observers
+registrados, cada uno reacciona de forma independiente.
+Código: ejercicio08_restaurante/
+
+
+EJERCICIO #09 — Sistema de Autenticación Empresarial
+------------------------------------------------------------
+Patrones: Strategy + Chain of Responsibility
+  - Strategy: PasswordStrategy/GoogleStrategy/BiometricStrategy son
+    mecanismos de autenticación intercambiables según el usuario.
+  - Chain of Responsibility: CredentialValidator → PermissionValidator
+    → LocationValidator → TimeValidator validan en secuencia tras
+    la autenticación.
+Interacción: AuthService selecciona la Strategy correcta →
+autenticación exitosa → el resultado pasa por la cadena de
+validadores → si todos aprueban, se concede acceso. Strategy decide
+"cómo autentico"; Chain decide "si tengo acceso" (fases distintas:
+autenticación vs autorización).
+Código: ejercicio09_autenticacion/
+
+
+EJERCICIO #10 — Aplicación de Edición de Imágenes
+-------------------------------------------------------
+Patrones: Decorator + Command
+  - Decorator: GrayscaleDecorator/SepiaDecorator/BrightnessDecorator
+    aplican filtros acumulativos, en cualquier orden, sobre la imagen.
+  - Command: ApplyFilterCommand encapsula cada operación con
+    execute()/undo(); CommandHistory guarda el historial y permite
+    deshacer un filtro específico (no solo el último).
+Interacción: usuario aplica filtro → se crea un ApplyFilterCommand que
+envuelve la imagen con un Decorator → se agrega al historial →
+deshacer quita ese wrapper específico y restaura la imagen anterior.
+Código: ejercicio10_imagenes/
+
+
+CRITERIOS DE ENTREGA (según el docx original)
+--------------------------------------------------
+Por cada ejercicio:
+  1. Explicación del rol de cada patrón — cubierto arriba, en este
+     .txt y en el javadoc de cada clase principal.
+  2. Descripción de la interacción entre los dos patrones — cubierto
+     arriba ("Interacción:" en cada ejercicio).
+  3. Esquema de código que ilustre la solución — el código Java en
+     src/main/java/dosw/taller4_patrones/ es ese esquema, ya
+     implementado (no solo diagramado).
+  4. Demostración de ejecución de código funcional — cada Main.java
+     se compiló y ejecutó exitosamente antes de comitear (ver
+     historial de commits "feat: TALLER_DOSW_4 ejercicios...").
