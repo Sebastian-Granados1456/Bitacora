@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Ejercicio 05 — Transacciones Bancarias.
+ * Fuente: "DOSW 1 - S02.pptx" (Ejercicios de repaso #5).
  * Procesar la lista con peek() para ver cada transacción, y anyMatch()
  * para saber si existe al menos una no aprobada (lote inválido).
  */

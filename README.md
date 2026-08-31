@@ -21,6 +21,8 @@ java -cp target/classes dosw.semana_2.pokemon.EjercicioNN
 
 # SEMANA No 1 — DOSW Manejo de Streams
 
+> Los 5 ejercicios de esta semana vienen de la diapositiva **"DOSW 1 - S02.pptx"** (sección "Ejercicios de Repaso", diapositivas 2-6), tal como pide la Tarea #1 de esa misma presentación.
+
 ## Datos personales:
 - Nombre y Apellido:
 - Código de Estudiante:

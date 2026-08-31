@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 /**
  * Ejercicio 01 — Números Pares mayores a diez.
+ * Fuente: "DOSW 1 - S02.pptx" (Ejercicios de repaso #1).
  * Dada una lista de enteros, obtener una nueva lista solo con los números
  * pares mayores a 10.
  */

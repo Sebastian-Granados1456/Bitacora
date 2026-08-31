@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Ejercicio 03 — Obtener nombres de los Usuarios.
+ * Fuente: "DOSW 1 - S02.pptx" (Ejercicios de repaso #3).
  * Filtrar solo los usuarios activos, obtener sus nombres en mayúscula y
  * ordenarlos alfabéticamente.
  */

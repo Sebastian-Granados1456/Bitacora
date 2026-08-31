@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 /**
  * Ejercicio 02 — Cantidad de Palabras con más de 4 caracteres.
+ * Fuente: "DOSW 1 - S02.pptx" (Ejercicios de repaso #2).
  * Filtrar palabras de más de 4 caracteres, pasarlas a mayúsculas,
  * ordenarlas alfabéticamente y contar cuántas quedan.
  */

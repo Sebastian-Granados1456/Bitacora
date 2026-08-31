@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Ejercicio 04 — Personas mayores de edad.
+ * Fuente: "DOSW 1 - S02.pptx" (Ejercicios de repaso #4).
  * Con los mismos atributos de Usuario, filtrar los mayores de edad (18+)
  * y obtener solo sus nombres.
  */
