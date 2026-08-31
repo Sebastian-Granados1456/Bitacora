@@ -1,0 +1,285 @@
+EXPLICACIÓN — DOSW 1 - S03.pptx
+================================
+Fuente: "DOSW 1 - S03.pptx" (50 diapositivas)
+Temas: diagramas de clases UML y 11 patrones de diseño (Factory
+Method, Abstract Factory, Builder, Adapter, Bridge, Composite,
+Decorator, Chain of Responsibility, Command, Iterator, Strategy),
+cada uno con un ejercicio corto de código.
+
+Código: src/main/java/dosw/slides_s03/ejercicioNN_patron/
+Cada carpeta trae su propio Main.java ejecutable.
+
+
+0. DIAGRAMA DE CLASES (diapositiva 1)
+-----------------------------------------
+Diagrama estructural de UML que modela las relaciones estáticas de un
+sistema (base de la POO). Una clase define nombre, atributos, métodos
+y visibilidad. Relaciones típicas: asociación, agregación/composición,
+herencia, con su multiplicidad (1, 0..1, 1..*, etc.).
+
+Qué tener en cuenta: antes de programar cualquier patrón, conviene
+dibujar el diagrama de clases del problema — ayuda a decidir qué
+relación (herencia vs composición) usar, que es justamente la decisión
+que cada patrón de este taller resuelve de una forma distinta.
+
+
+1. ¿QUÉ SON LOS PATRONES DE DISEÑO? (diapositivas 2-3)
+-----------------------------------------------------------
+Soluciones habituales a problemas recurrentes de diseño de software;
+"planos" reutilizables y personalizables, no código copia-pega.
+
+Tres categorías:
+  - Creacionales: mecanismos de creación de objetos (Factory Method,
+    Abstract Factory, Builder...).
+  - Estructurales: cómo ensamblar objetos/clases en estructuras más
+    grandes manteniendo flexibilidad (Adapter, Bridge, Composite,
+    Decorator...).
+  - De comportamiento: algoritmos y asignación de responsabilidades
+    entre objetos (Chain of Responsibility, Command, Iterator,
+    Strategy...).
+
+
+2. FACTORY METHOD (diapositivas 4-7) — Ejercicio #1
+--------------------------------------------------------
+Qué es: proporciona una interfaz para crear objetos en una
+superclase/fábrica, dejando que la lógica de creación decida qué
+implementación concreta devolver, sin acoplar al cliente con las
+clases concretas.
+
+Cómo implementarlo:
+  1. Interfaz común para todos los productos (PaymentMethod).
+  2. La fábrica declara un método que devuelve esa interfaz
+     (PaymentFactory.create(tipo)).
+  3. Cada producto concreto (TarjetaCreditoPayment, PayPalPayment...)
+     implementa la interfaz.
+
+Qué tener en cuenta: aplica SRP (la creación se mueve a un solo
+lugar) y OCP (agregar un medio de pago nuevo no rompe el código
+cliente existente, solo se agrega un case más en la fábrica).
+
+Ejercicio resuelto: pagos de e-commerce (Tarjeta/PayPal/Transferencia)
+— ver ejercicio01_factorymethod/.
+
+
+3. ABSTRACT FACTORY (diapositivas 8-11) — Ejercicio #2
+------------------------------------------------------------
+Qué es: produce FAMILIAS de objetos relacionados sin especificar sus
+clases concretas — garantiza que los productos creados por una misma
+fábrica son compatibles entre sí.
+
+Cómo implementarlo:
+  1. Un producto abstracto por cada "pieza" de la familia (Control,
+     Juego, InterfazGrafica).
+  2. Una interfaz ConsolaFactory con un método creador por producto.
+  3. Una fábrica concreta por variante (PlayStationFactory,
+     XboxFactory) que crea siempre productos de su misma familia.
+
+Diferencia con Factory Method: Factory Method crea UN producto;
+Abstract Factory crea una FAMILIA completa y coherente de productos.
+
+Ejercicio resuelto: videojuegos multiconsola (PlayStation/Xbox) — ver
+ejercicio02_abstractfactory/.
+
+
+4. BUILDER (diapositivas 12-15) — Ejercicio #3
+----------------------------------------------------
+Qué es: construye objetos complejos paso a paso, permitiendo distintas
+representaciones con el mismo proceso de construcción. No elimina los
+parámetros, los convierte en pasos explícitos con nombre.
+
+Cómo implementarlo:
+  1. Builder con métodos encadenables (fluent API: setX().setY()...).
+  2. build() ensambla el objeto final, normalmente inmutable.
+  3. Opcional: un Director que conoce "recetas" de configuraciones
+     predefinidas y reutiliza el mismo Builder.
+
+Qué tener en cuenta: evita constructores con muchos parámetros (el
+"telescoping constructor" problem); aplica SRP separando la lógica de
+construcción del objeto de negocio en sí.
+
+Ejercicio resuelto: fábrica de muñecos (acción/clásica) — ver
+ejercicio03_builder/.
+
+
+5. ADAPTER (diapositivas 16-19) — Ejercicio #4
+------------------------------------------------------
+Qué es: permite colaborar a objetos con interfaces incompatibles,
+creando una clase intermedia (traductora) entre el código cliente y
+una clase que no se puede modificar (legacy o de terceros).
+
+Cómo implementarlo:
+  1. Interfaz que el cliente ya conoce y usa (SistemaAbastecimiento).
+  2. Servicio externo con una interfaz distinta que no se puede tocar
+     (CargadorElectricoRapido.cargarKWh(), CargadorElectricoLento.
+     suministrarKWh()).
+  3. Adapter que implementa la interfaz del cliente y traduce
+     internamente la llamada al formato del servicio externo.
+
+Qué tener en cuenta: se pueden agregar nuevos adaptadores sin romper
+el código cliente existente (OCP), siempre que respeten la interfaz.
+
+Ejercicio resuelto: gasolinería con cargadores eléctricos de distintos
+proveedores (factores de conversión litros→KWh: rápido x8.0, lento
+x7.0) — ver ejercicio04_adapter/.
+
+
+6. BRIDGE (diapositivas 20-23) — Ejercicio #5
+-----------------------------------------------------
+Qué es: divide una clase (o jerarquía) en dos jerarquías separadas —
+Abstracción e Implementación — que se desarrollan independientemente.
+La abstracción delega el trabajo real a la implementación en vez de
+heredarlo.
+
+Cómo implementarlo:
+  1. Implementación: interfaz común a las variantes de una dimensión
+     (Color: Rojo, Azul).
+  2. Abstracción: clase de alto nivel que referencia (no hereda) un
+     objeto de la Implementación (Forma referencia un Color).
+  3. Abstracciones refinadas (Circulo, Cuadrado) usan ese color
+     inyectado sin necesitar una subclase por combinación.
+
+Por qué existe: sin Bridge, agregar una segunda dimensión (color) a
+una jerarquía existente (formas) obliga a crear una subclase por cada
+combinación (explosión combinatoria). Con Bridge, cada dimensión vive
+en su propia jerarquía y se combinan por composición.
+
+Ejercicio resuelto: formas geométricas (Círculo/Cuadrado) + colores
+(Rojo/Azul) — ver ejercicio05_bridge/.
+
+
+7. COMPOSITE (diapositivas 24-28) — Ejercicio #6
+--------------------------------------------------------
+Qué es: compone objetos en estructuras de árbol y permite tratarlas
+como si fueran un objeto individual (usa polimorfismo + recursión).
+
+Cómo implementarlo:
+  1. Interfaz Componente común a hojas y contenedores (ItemBodega).
+  2. Hoja: elemento simple sin subelementos (Producto).
+  3. Contenedor: tiene una lista de Componentes (que pueden ser hojas
+     u otros contenedores) y delega el trabajo a sus hijos, combinando
+     los resultados (Caja.calcularPrecioTotal() suma recursivamente).
+
+Qué tener en cuenta: el cliente nunca necesita distinguir si trabaja
+con una hoja o un contenedor — llama al mismo método en ambos casos.
+
+Ejercicio resuelto: bodega con productos y cajas anidadas — ver
+ejercicio06_composite/.
+
+
+8. DECORATOR (diapositivas 29-32) — Ejercicio #7
+--------------------------------------------------------
+Qué es: añade funcionalidades a un objeto envolviéndolo en objetos
+"decoradores" que comparten su misma interfaz, en vez de usar herencia
+(que es rígida y se define en tiempo de compilación).
+
+Cómo implementarlo:
+  1. Interfaz Componente común (Barco).
+  2. Componente concreto con el comportamiento base (BarcoBase).
+  3. Decorador base que envuelve un Componente (tipado como la
+     interfaz, no la clase concreta) y delega todo por defecto
+     (ModuloDecorator).
+  4. Decoradores concretos (BlindajeReforzado, RadarAvanzado,
+     Misiles...) sobreescriben solo lo que necesitan alterar.
+
+Por qué existe: sin Decorator, combinar 5 módulos opcionales
+requeriría hasta 2^5 = 32 subclases; con Decorator son 5 wrappers + 1
+clase base = 6 clases, y se combinan libremente en tiempo de
+ejecución (ver también el Ejercicio #4 de TALLER_DOSW_#4, que combina
+Decorator con Command para el mismo tipo de problema).
+
+Ejercicio resuelto: simulador naval con módulos combinables (blindaje,
+radar, misiles, antitorpedos) — ver ejercicio07_decorator/.
+
+
+9. CHAIN OF RESPONSIBILITY (diapositivas 33-36) — Ejercicio #8
+---------------------------------------------------------------------
+Qué es: pasa una solicitud a lo largo de una cadena de manejadores;
+cada uno decide si la procesa (y detiene la cadena) o la pasa al
+siguiente. Útil cuando no se conocen de antemano los tipos exactos de
+solicitud ni su secuencia.
+
+Cómo implementarlo:
+  1. Clase manejadora base con una referencia al siguiente manejador
+     (ControlMigratorio.siguiente) y un método que decide procesar o
+     delegar.
+  2. Manejadores concretos (RevisionPasaporte, ControlAntecedentes...)
+     autónomos e inmutables, cada uno con su propia validación.
+  3. El cliente compone la cadena una vez (setSiguiente() encadenado).
+
+Ejercicio resuelto: controles migratorios de Estados Unidos (pasaporte
+→ antecedentes → motivo de viaje → aprobación final) — ver
+ejercicio08_chainofresponsibility/.
+
+
+10. COMMAND (diapositivas 37-40) — Ejercicio #9
+---------------------------------------------------
+Qué es: convierte una solicitud (llamada a un método) en un objeto
+independiente, permitiendo pasar comandos como argumentos, encolarlos,
+o cambiarlos en tiempo de ejecución.
+
+Cómo implementarlo:
+  1. Interfaz Comando con un único método ejecutar() — es una
+     interfaz funcional, por lo que se puede usar una method
+     reference en vez de una clase concreta por acción.
+  2. Receptor con la lógica de negocio real (Personaje).
+  3. Emisor/Invoker que guarda el comando actual y lo dispara sin
+     conocer qué hace (ControlDeJuego).
+
+Qué tener en cuenta: aquí se usaron method references (heroe::atacar,
+etc.) porque ComandoJuego tiene un solo método abstracto — evita
+escribir 4 clases de comando casi idénticas para caminar/saltar/
+atacar/defenderse.
+
+Ejercicio resuelto: personaje de videojuego con acciones como comandos
+— ver ejercicio09_command/.
+
+
+11. ITERATOR (diapositivas 41-46) — Ejercicio #10
+-------------------------------------------------------
+Qué es: permite recorrer los elementos de una colección sin exponer su
+representación interna (array, lista, árbol, etc.).
+
+Cómo implementarlo:
+  1. Interfaz Colección que declara cómo obtener un iterador
+     (ColeccionLugares extiende Iterable<String>).
+  2. Colección concreta (ItinerarioRoma) que guarda los datos
+     internamente (aquí una List) sin exponerlos directamente.
+  3. Iterador concreto (clase interna IteradorItinerario) que controla
+     su propia posición — así varios iteradores sobre la misma
+     colección no interfieren entre sí.
+
+Qué tener en cuenta: al implementar Iterable<T>, la clase también
+puede recorrerse con el for-each estándar de Java (se ve en el Main).
+
+Ejercicio resuelto: itinerario turístico por Roma (Coliseo, Foro
+Romano, Fontana di Trevi, Panteón, Plaza de España) — ver
+ejercicio10_iterator/.
+
+
+12. STRATEGY (diapositivas 47-50) — Ejercicio #11
+-------------------------------------------------------
+Qué es: define una familia de algoritmos, cada uno en su propia clase,
+haciéndolos intercambiables en tiempo de ejecución.
+
+Cómo implementarlo:
+  1. Interfaz Estrategia común a todos los algoritmos
+     (EstrategiaRuta.calcularRuta()).
+  2. Estrategias concretas (RutaMasRapida, RutaMasCorta,
+     RutaSinPeajes), cada una con su propia variante del algoritmo.
+  3. Contexto (AplicacionNavegacion) que mantiene una referencia a la
+     estrategia activa y expone un setter para cambiarla en runtime.
+
+Qué tener en cuenta: el Contexto nunca sabe qué algoritmo concreto usa
+— solo invoca el método de la interfaz. Útil cuando varias clases se
+diferencian solo en CÓMO ejecutan un mismo comportamiento.
+
+Ejercicio resuelto: app de navegación con distintos algoritmos de
+cálculo de ruta — ver ejercicio11_strategy/.
+
+
+Relación con el resto de la bitácora
+--------------------------------------
+Estos 11 patrones son la base teórica que se combina de a pares en
+"TALLER_DOSW_#4" (Talleres/), donde cada ejercicio mezcla exactamente
+2 de estos patrones para resolver un caso más completo (por ejemplo,
+Strategy+Factory Method, Builder+Decorator, Adapter+Facade, etc.).
