@@ -2,8 +2,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Construye el mensaje de bienvenida de la pareja a partir de una lista
- * de Estudiante, usando Programación Funcional (stream + map + collect).
+ * Construye el mensaje de bienvenida a partir de una lista de Estudiante,
+ * usando Programación Funcional (stream + map + collect).
  */
 public class MensajeBienvenida {
 
@@ -21,7 +21,6 @@ public class MensajeBienvenida {
                 .map(Estudiante::correo)
                 .collect(Collectors.joining(" y "));
 
-        return "¡Hola, bienvenidos! Somos la pareja conformada por " + presentacion
-                + ". Nuestros correos son: " + correos + ".";
+        return "¡Hola, bienvenidos! Soy " + presentacion + ". Mi correo es: " + correos + ".";
     }
 }

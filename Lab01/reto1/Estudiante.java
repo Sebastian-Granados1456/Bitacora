@@ -1,5 +1,5 @@
 /**
- * Representa a un integrante de la pareja: guarda solo los datos que se
+ * Representa al estudiante que se presenta: guarda solo los datos que se
  * necesitan para construir el saludo (nombre, edad, correo y semestre).
  * Es un "record" porque no necesita lógica propia, solo almacenar datos.
  */

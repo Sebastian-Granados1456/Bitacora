@@ -15,7 +15,7 @@ public class Main {
         Set<Integer> treeSet = new TreeSet<>(Set.of(12, 3, 25, 10, 7, 30, 18, 4));
 
         // stream().filter() con lambda: descarta del HashSet los múltiplos de 3
-        // (Estudiante A) y del TreeSet los múltiplos de 5 (Estudiante B).
+        // y del TreeSet los múltiplos de 5.
         Set<Integer> guerrerosA = hashSet.stream()
                 .filter(n -> n % 3 != 0)
                 .collect(Collectors.toSet());
@@ -24,7 +24,7 @@ public class Main {
                 .filter(n -> n % 5 != 0)
                 .collect(Collectors.toSet());
 
-        // Unión de ambos grupos en un TreeSet (elimina duplicados automáticamente
+        // Unión de los dos grupos en un TreeSet (elimina duplicados automáticamente
         // y mantiene orden ascendente) y se imprime con forEach + lambda.
         Set<Integer> arena = Stream.concat(guerrerosA.stream(), guerrerosB.stream())
                 .collect(Collectors.toCollection(TreeSet::new));

@@ -2,8 +2,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Máquina que responde a comandos escritos. Cada fragmento (A y B) resuelve
- * sus comandos con switch-case y luego ambos se unifican en un único
+ * Máquina que responde a comandos escritos. Los 8 comandos se resuelven con
+ * switch-case en dos grupos y luego se unifican en un único
  * Map<String, Runnable> para poder invocar cualquier comando con .run().
  */
 public class MaquinaDecisiones {
@@ -15,7 +15,7 @@ public class MaquinaDecisiones {
         registrarFragmento2();
     }
 
-    // Fragmento 1 (Estudiante A): switch-case que decide qué mensaje imprimir
+    // Primer grupo de comandos: switch-case que decide qué mensaje imprimir
     // para SALUDAR/DESPEDIR/CANTAR/DANZAR, y guarda cada acción como lambda
     // ( () -> accion() ) dentro del mapa de comandos.
     private void registrarFragmento1() {
@@ -33,7 +33,7 @@ public class MaquinaDecisiones {
         }
     }
 
-    // Fragmento 2 (Estudiante B): mismo patrón que el fragmento 1, pero para
+    // Segundo grupo de comandos: mismo patrón que el anterior, pero para
     // BROMEAR/GRITAR/SUSURRAR/ANALIZAR, también registrado como Runnable.
     private void registrarFragmento2() {
         for (String comando : new String[]{"BROMEAR", "GRITAR", "SUSURRAR", "ANALIZAR"}) {

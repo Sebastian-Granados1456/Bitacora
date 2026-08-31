@@ -5,13 +5,14 @@ import java.util.stream.Collectors;
 
 /**
  * Reto 4 - El Tesoro de las Llaves Duplicadas.
- * Combina un HashMap (Estudiante A) y un Hashtable (Estudiante B) en un
- * único mapa ordenado, resolviendo los conflictos de llave a favor del Hashtable.
+ * Combina un HashMap y un Hashtable en un único mapa ordenado, resolviendo
+ * los conflictos de llave a favor del Hashtable.
  */
 public class Main {
     public static void main(String[] args) {
-        // HashMap: ante llaves repetidas se conserva el PRIMER valor con
-        // putIfAbsent(), que solo inserta si la llave todavía no existe.
+        // HashMap: rápido pero sin sincronización. Ante llaves repetidas se
+        // conserva el PRIMER valor con putIfAbsent(), que solo inserta si la
+        // llave todavía no existe.
         Map<String, Integer> mapaA = new HashMap<>();
         putConservandoPrimero(mapaA, "oro", 5);
         putConservandoPrimero(mapaA, "plata", 3);
@@ -40,14 +41,14 @@ public class Main {
     }
 
     // Inserta en el mapa solo si la llave no existe todavía, conservando
-    // así el primer valor recibido para esa llave (regla del HashMap A).
+    // así el primer valor recibido para esa llave (regla del HashMap).
     private static void putConservandoPrimero(Map<String, Integer> mapa, String clave, int valor) {
         mapa.putIfAbsent(clave, valor);
     }
 
-    // Combina ambos mapas con Collectors.toMap(): recorre las entradas del
-    // HashMap y del Hashtable y, si una llave se repite en ambos ("oro"),
-    // el merge function (b) se queda con el valor del Hashtable (prioridad B).
+    // Combina los dos mapas con Collectors.toMap(): recorre las entradas del
+    // HashMap y del Hashtable y, si una llave se repite en los dos ("oro"),
+    // el merge function se queda con el valor del Hashtable (tiene prioridad).
     private static Map<String, Integer> combinar(Map<String, Integer> a, Map<String, Integer> b) {
         return java.util.stream.Stream.concat(a.entrySet().stream(), b.entrySet().stream())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (valorA, valorB) -> valorB));
