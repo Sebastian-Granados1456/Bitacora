@@ -1,0 +1,269 @@
+EXPLICACIÓN — DOSW 1 - S01.pptx
+================================
+Fuente: "DOSW 1 - S01.pptx" (20 diapositivas)
+Temas: estructura interna de Git, comandos Git, Array vs ArrayList,
+HashMap vs Hashtable, HashSet vs TreeSet, String vs StringBuilder vs
+StringBuffer, introducción a programación funcional y streams.
+
+Este archivo es mi propio resumen de estudio: qué significa cada tema,
+cómo se usa en código y qué tener en cuenta al aplicarlo. No trae
+ejercicios propios para resolver (es contenido teórico de referencia),
+por eso no hay carpeta de código asociada a esta sesión.
+
+
+1. SECCIONES INTERNAS DE UN PROYECTO GIT
+-----------------------------------------
+- .git/            → guarda los metadatos y la base de datos de objetos
+                      del proyecto (la parte más importante de Git).
+- working directory → copia de una versión del proyecto, sacada de la
+                      base de datos comprimida en .git y puesta en disco
+                      para poder editarla.
+- staging area / index → archivo (dentro de .git) que registra qué va a
+                      entrar en el próximo commit.
+
+Qué tener en cuenta: cuando "algo no aparece en el commit" casi siempre
+es porque nunca pasó por `git add` (no llegó al staging area).
+
+
+2. COMANDOS GIT — TABLA DE REFERENCIA RÁPIDA
+----------------------------------------------
+Inicialización / clonado:
+  git init                        crea un repo nuevo (.git en la carpeta actual)
+  git clone <url>                 copia un repo remoto completo (historial incluido)
+
+Estado y seguimiento:
+  git status                      qué archivos están modificados, sin rastrear o listos
+  git add . / git add <archivo>   manda cambios al staging area
+  git commit -m "mensaje"         guarda una instantánea (snapshot) del staging area
+  git push                        sincroniza el repo local con el remoto
+  git pull                        trae + fusiona cambios del remoto (fetch + merge)
+
+Ramas:
+  git checkout <rama>             cambia a una rama existente
+  git checkout -b <rama>          crea una rama nueva y cambia a ella
+  git branch                      lista las ramas
+  git branch <rama>               crea una rama sin cambiar a ella
+  git branch -D <rama>            elimina una rama
+  git merge <rama>                fusiona <rama> dentro de la rama actual
+  git rebase                      reescribe el historial para dejarlo lineal
+                                   (vs merge, que conserva ambos historiales tal cual)
+
+Historial:
+  git log                         historial completo (commit, autor, fecha, mensaje)
+  git log --oneline               una línea por commit (7 chars de SHA + mensaje)
+  git log --stat                  añade qué archivos cambiaron y cuántas líneas
+
+Comparar y guardar temporalmente:
+  git diff                        diferencia entre working directory y staging area
+  git diff <c1> <c2>               diferencia entre dos commits
+  git diff <rama1>..<rama2>        diferencia entre dos ramas
+  git stash                       guarda cambios sin comitear y limpia el directorio
+  git stash pop                   aplica el último stash guardado y lo borra de la pila
+
+Configuración:
+  git config --global user.name "Nombre"
+  git config --global user.email "correo"
+  git config --list               muestra la config a nivel sistema/global/local
+
+Deshacer y limpiar:
+  git reset --soft HEAD~1         retrocede el commit pero conserva los cambios
+  git reset --mixed HEAD~1        retrocede el commit y saca los cambios del staging
+  git reset --hard HEAD~1         retrocede el commit y BORRA los cambios (irreversible)
+  git clean -n                    simula qué archivos sin rastrear se borrarían
+  git clean                       borra de verdad los archivos sin rastrear
+
+Remotos:
+  git remote add origin <url>     conecta el repo local con uno remoto
+  git fetch                       descarga cambios del remoto sin fusionarlos aún
+
+Qué tener en cuenta: `git reset --hard` es destructivo (se pierde trabajo sin
+commitear); siempre revisar `git status` antes de usarlo. `rebase` reescribe
+SHAs de commits ya existentes — evitarlo sobre ramas que otros ya bajaron.
+
+
+3. BUENAS PRÁCTICAS (según la slide 6)
+-----------------------------------------
+- Flujo de trabajo limpio, estructurado y colaborativo.
+- Mensajes de commit claros que digan QUÉ se hizo (facilita el historial).
+- Una rama por funcionalidad/corrección, luego fusionar.
+- Usar .gitignore para no rastrear archivos irrelevantes (target/, *.class, etc.).
+
+
+4. ARRAY VS ARRAYLIST
+------------------------
+Array:
+  - Tamaño fijo, definido al crearlo, no se puede cambiar después.
+  - Solo tipos primitivos (int, double, boolean...) o referencias directas.
+  - Acceso muy rápido (índice directo en memoria).
+  - No soporta genéricos → más fácil cometer errores de tipo.
+  - Acceso con [] y tamaño con .length.
+  - Puede ser unidimensional o multidimensional.
+
+  Ejemplo:
+    int[] numeros = new int[5];
+    numeros[0] = 10;
+    System.out.println(numeros.length); // 5
+
+ArrayList:
+  - Tamaño dinámico, crece o se reduce automáticamente.
+  - Solo almacena objetos; los primitivos se autoboxean (int → Integer).
+  - Más lento que Array, sobre todo al redimensionarse internamente.
+  - Soporta genéricos (List<String>, List<Integer>...) → más seguro en tiempo de compilación.
+  - Métodos: add(), remove(), size(), indexOf(), contains().
+  - Solo unidimensional (para "matrices" se anidan ArrayList<ArrayList<T>>).
+
+  Ejemplo:
+    List<Integer> numeros = new ArrayList<>();
+    numeros.add(10);
+    System.out.println(numeros.size()); // 1
+
+Qué tener en cuenta: usar Array cuando el tamaño es fijo y se busca máximo
+rendimiento; usar ArrayList cuando el tamaño varía en tiempo de ejecución
+(la mayoría de los casos en código de aplicación).
+
+
+5. HASHMAP VS HASHTABLE
+--------------------------
+HashMap:
+  - Implementación de Map, pares clave-valor, usa tabla hash internamente.
+  - Claves únicas, valores pueden repetirse.
+  - NO sincronizado → más rápido en un solo hilo.
+  - Permite una clave null y varios valores null.
+
+Hashtable:
+  - También pares clave-valor con tabla hash interna.
+  - Claves únicas, valores pueden repetirse.
+  - SÍ sincronizado → seguro para multihilo, pero más lento.
+  - NO permite claves ni valores null.
+  - Clase legacy (desde Java 1.0); hoy se prefiere HashMap o ConcurrentHashMap.
+
+  Ejemplo:
+    Map<String, Integer> mapa = new HashMap<>();
+    mapa.put("a", 1);
+    mapa.putIfAbsent("a", 2); // no sobreescribe, ya existe "a"
+
+Qué tener en cuenta: en código moderno de un solo hilo, HashMap es la opción
+por defecto; Hashtable solo aparece en código legacy o casos muy puntuales
+donde se requiere sincronización simple (hoy se prefiere ConcurrentHashMap).
+
+
+6. HASHSET VS TREESET
+------------------------
+HashSet:
+  - Colección de elementos únicos (sin duplicados).
+  - Tabla hash interna, NO mantiene ningún orden.
+  - Permite un elemento null.
+  - Muy rápido: O(1) promedio para buscar/agregar/eliminar.
+
+TreeSet:
+  - También elementos únicos.
+  - Árbol rojo-negro interno → mantiene los elementos ORDENADOS
+    (orden natural o con un Comparator).
+  - No permite null en versiones modernas de Java.
+  - Más lento que HashSet: O(log n), porque mantiene el orden.
+
+  Ejemplo:
+    Set<Integer> desordenado = new HashSet<>(List.of(5, 1, 3));
+    Set<Integer> ordenado = new TreeSet<>(List.of(5, 1, 3)); // [1, 3, 5]
+
+Qué tener en cuenta: usar TreeSet solo si el orden importa para el caso de
+uso; si no, HashSet es más eficiente.
+
+
+7. STRING VS STRINGBUILDER VS STRINGBUFFER
+----------------------------------------------
+String:
+  - Inmutable: cada modificación crea un nuevo objeto en memoria.
+  - Seguro entre hilos (no cambia), pero ineficiente con muchas concatenaciones.
+
+StringBuilder:
+  - Mutable: se puede modificar el contenido sin crear nuevos objetos.
+  - NO sincronizado → más rápido, pero no thread-safe.
+  - Ideal para modificar cadenas muchas veces en un solo hilo.
+
+StringBuffer:
+  - Igual que StringBuilder pero SINCRONIZADO (thread-safe).
+  - Más lento que StringBuilder por el costo de la sincronización.
+  - Se usa cuando varios hilos modifican la misma cadena.
+
+  Ejemplo:
+    StringBuilder sb = new StringBuilder();
+    sb.append("Hola").append(" ").append("Mundo");
+    System.out.println(sb.toString()); // "Hola Mundo"
+
+Qué tener en cuenta: en la práctica casi siempre se usa StringBuilder;
+StringBuffer solo si de verdad hay concurrencia sobre la misma cadena.
+
+
+8. PROGRAMACIÓN FUNCIONAL — CONCEPTOS CLAVE
+-----------------------------------------------
+Definición: paradigma que trata la computación como evaluación de
+funciones matemáticas, evita cambios de estado y datos mutables; se
+enfoca en aplicar y componer funciones en vez de modificar estado.
+
+Conceptos:
+  - Funciones puras: mismo input → siempre mismo output, sin efectos
+    secundarios (no tocan variables externas).
+  - Inmutabilidad: los datos no cambian después de creados.
+  - Funciones de orden superior: reciben o devuelven otras funciones.
+  - Composición de funciones: combinar varias funciones encadenando su
+    salida como entrada de la siguiente.
+  - Enfoque declarativo: se describe QUÉ se quiere lograr, no CÓMO
+    (se evitan bucles y estructuras de control explícitas).
+
+Ventajas: código más limpio, más fácil de probar, mayor paralelismo/
+concurrencia, mayor mantenibilidad.
+
+Ejemplo dado en la slide 15 (números mayores a 10 en una lista):
+  Con ciclos:
+    List<Integer> resultado = new ArrayList<>();
+    for (int n : lista) {
+        if (n > 10) resultado.add(n);
+    }
+  Con enfoque funcional (lambda + stream):
+    List<Integer> resultado = lista.stream()
+            .filter(n -> n > 10)
+            .toList();
+
+
+9. EXPRESIONES LAMBDA E INTERFACES FUNCIONALES
+---------------------------------------------------
+Una expresión lambda representa el método abstracto de una interfaz
+funcional (interfaz con exactamente un método abstracto; puede tener
+métodos default o estáticos adicionales).
+
+  Sintaxis: (parámetros) -> { cuerpo }
+  Ejemplo:  (a, b) -> a + b
+
+
+10. STREAMS — TIPOS DE OPERACIONES
+--------------------------------------
+Operaciones de creación: inician el flujo de datos (ej. list.stream()).
+
+Operaciones intermedias (lazy, devuelven otro Stream, se pueden encadenar):
+  - forEach   → recorre cada elemento (aunque técnicamente es terminal)
+  - map       → transforma cada elemento en otro valor
+  - filter    → filtra según una condición
+  - peek      → "espía" cada elemento sin modificarlo (debug)
+  - sorted    → ordena el flujo
+  - distinct  → elimina duplicados
+  - limit     → toma solo los primeros n elementos
+  - skip      → salta los primeros n elementos
+
+Operaciones terminales (cierran el stream, devuelven un resultado no-stream;
+una vez usada una terminal, el stream ya no se puede reutilizar):
+  - reduce           → combina todos los elementos en un solo resultado
+  - collect          → recoge los elementos procesados en una colección/estructura
+  - min(Comparator) / max(Comparator) → elemento mínimo o máximo
+  - anyMatch / allMatch / noneMatch   → validan si alguno/todos/ninguno cumplen una condición
+
+Qué tener en cuenta: como las operaciones intermedias son perezosas, un
+stream con solo `.filter().map()` y sin operación terminal NO ejecuta
+nada — hay que cerrarlo con collect/reduce/forEach/etc.
+
+
+Relación con el resto de la bitácora
+--------------------------------------
+Los conceptos de streams/lambdas de esta sesión son la base que se aplica
+en los ejercicios de "DOSW 1 - S02.pptx" (ver Slides/S02 y
+src/main/java/dosw/semana_1/streams), y en los retos de Lab01.
