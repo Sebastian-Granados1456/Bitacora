@@ -1,0 +1,244 @@
+EXPLICACIÓN — DOSW 1 - S05.pptx
+================================
+Fuente: "DOSW 1 - S05.pptx" (78 diapositivas)
+Temas: Agilismo, Scrum, atributos de calidad, jerarquía Épica/Feature/
+HU/Tarea, estimación (Planning Poker), pruebas de software, TDD,
+cobertura (JaCoCo), SonarQube, Mocks y Stubs (Mockito).
+
+Esta sesión es la base teórica del TALLER_#6 (ver
+Talleres/TALLER_6_explicacion.txt, que aplica la jerarquía Épica/
+Feature/HU/Tarea al proyecto TechCup). El único fragmento con código
+reproducible es el ejemplo de TDD, que se implementó en
+src/main/java/dosw/slides_s05_tdd/.
+
+
+1. AGILISMO (diapositivas 1-9)
+------------------------------------
+Tradicional (Waterfall/Cascada): fases secuenciales, para proyectos
+con requerimientos muy bien definidos y pocos cambios.
+
+Metodologías ágiles: dividen el trabajo en fases con entrega y mejora
+continua. Beneficios: responder al cambio, mejorar colaboración y
+productividad, identificar riesgos temprano, simplificar planeación,
+reducir costos y reprocesos, dividir el proyecto en historias de
+usuario pequeñas.
+
+Manifiesto ágil (17 feb 2001): declaración de valores/principios (12
+principios, 4 pilares) alternativa a la gestión tradicional de
+proyectos.
+
+
+2. SCRUM (diapositivas 10-18)
+------------------------------------
+Qué es: marco de trabajo liviano para generar valor mediante
+soluciones adaptativas a problemas complejos. Se basa en EMPIRISMO:
+decisiones basadas en observación y experimentación, no en
+planificación exhaustiva anticipada.
+
+Pilares: Transparencia (mostrar los problemas, no ocultarlos),
+Inspección (revisar eventos/artefactos constantemente) y Adaptación
+(ajustar cambios lo antes posible).
+
+Valores: Coraje, Enfoque, Compromiso, Respeto, Apertura.
+
+Roles:
+  - Scrum Master: facilita el proceso, hace cumplir las reglas de
+    Scrum, entrena/motiva al equipo, elimina impedimentos.
+  - Product Owner: representa a los stakeholders, define expectativas
+    del producto, administra y prioriza el backlog.
+  - Scrum Team: grupo autoorganizado (3-9 personas) con las
+    habilidades necesarias para producir el entregable; se
+    autoadministra las tareas.
+
+Artefactos:
+  - Product Backlog: lista ordenada de todo lo que podría necesitar
+    el producto final; fuente única de requisitos, se actualiza
+    constantemente.
+  - Sprint Backlog: subconjunto del Product Backlog comprometido para
+    el sprint actual — no se debe agregar trabajo a mitad de sprint.
+  - Producto incremental: lo que se entrega al final de cada sprint.
+
+Ceremonias: organización del backlog, Sprint Planning, ejecución del
+sprint, Daily, Sprint Review, Sprint Retrospective.
+
+Herramientas top 3 para Agile: Jira (Atlassian), Azure Boards
+(Microsoft), GitLab.
+
+
+3. ATRIBUTOS DE CALIDAD (diapositivas 19-20)
+--------------------------------------------------
+La calidad se evalúa con atributos específicos: Funcional,
+Performance, Compatibilidad, Usabilidad, Fiabilidad, Seguridad,
+Mantenibilidad, Portabilidad. Cada atributo influye en el
+funcionamiento e impacto final del producto.
+
+
+4. NIVELES DE DESCOMPOSICIÓN DEL TRABAJO (diapositivas 21-27)
+----------------------------------------------------------------------
+De lo más grande/estratégico a lo más pequeño/operativo:
+
+  ÉPICA: gran iniciativa/necesidad de negocio, demasiado grande para
+  un solo sprint. La redactan Product Owners/stakeholders. Ejemplo:
+  "Un cliente de un banco digital desea pagar por móvil sin ir a una
+  sucursal".
+
+  FEATURE: funcionalidad concreta que aporta valor y ayuda a cumplir
+  la épica. Se deriva de la épica, la define el PO con el equipo
+  técnico. Ejemplo: "Implementar pagos por QR desde la app móvil".
+
+  HISTORIA DE USUARIO (HU): unidad más pequeña de trabajo en el
+  backlog ágil, escrita desde la perspectiva del usuario: "Como
+  [rol], quiero [funcionalidad], para [beneficio]". La complementan
+  criterios de aceptación.
+
+  TAREA: acciones técnicas específicas para completar una HU. Alto
+  nivel de detalle, asignable a una persona. Ejemplo: "Crear la tabla
+  materia con los datos...".
+
+Qué tener en cuenta (regla del taller, diapositiva 37): hasta llegar
+a las TAREAS están prohibidas palabras técnicas como endpoint,
+controller, database, React, Java, Spring, API — Épica/Feature/HU
+hablan del PROBLEMA y el VALOR; solo las Tareas hablan de
+CONSTRUCCIÓN.
+
+
+5. ESTIMACIÓN DE TAREAS — PLANNING POKER (diapositivas 42-44)
+----------------------------------------------------------------------
+En Scrum, la estimación asigna valores relativos ("puntos de
+historia") a tareas/HU para planificar sprints y predecir velocidad
+del equipo. Es crucial que TODO el equipo de desarrollo participe.
+
+Planning Poker: cada participante tiene cartas con números basados en
+la serie de Fibonacci (0, 1, 2, 3, 5, 8, 13, 21, 34...). Tras estimar,
+quienes dieron la puntuación más alta y más baja explican su
+razonamiento, y se repite la estimación hasta llegar a consenso.
+
+
+6. PRUEBAS DE SOFTWARE (diapositivas 47-64)
+--------------------------------------------------
+Por qué importan: previenen errores, mejoran el rendimiento,
+identifican problemas de arquitectura/diseño/seguridad. Son más
+efectivas cuando se hacen de forma continua (desde el diseño, durante
+la construcción, e incluso en producción).
+
+Vulnerabilidad: debilidad de un sistema explotable por un actor
+malintencionado (puerto abierto sin protección, software sin
+actualizar, wifi abierta, mala gestión de contraseñas).
+
+Tipos de pruebas:
+  - Unitarias: prueban métodos/funciones individuales (ej. el método
+    suma de una calculadora). Caja blanca.
+  - Funcionales: verifican el resultado de una acción según los
+    requisitos de negocio (ej. probar el login). Caja negra.
+  - De carga: simulan tráfico esperado para medir rendimiento y
+    capacidad de respuesta bajo estrés (ej. Black Friday en una
+    pasarela de pagos).
+
+Caja negra vs caja blanca: caja negra no conoce el código interno
+(solo el comportamiento observable); caja blanca tiene acceso total
+al código, infraestructura y diseño.
+
+
+7. TDD — TEST DRIVEN DEVELOPMENT (diapositivas 52-56)
+--------------------------------------------------------------
+Qué es: escribir primero la prueba (unitaria), luego el código que la
+hace pasar, y por último refactorizar. Ciclo ROJO → VERDE → REFACTOR.
+
+Ejemplo del docx (calculadora que suma):
+  1. Se acuerda con el cliente el criterio: al sumar dos números y
+     presionar "sumar", debe mostrarse el resultado.
+  2. Se convierte en una prueba concreta: 3 + 5 = 8.
+  3. La clase aún no existe → el test falla (ROJO).
+  4. Se escribe el código mínimo de la clase para que pase (VERDE).
+  5. Se refactoriza eliminando código duplicado, y se vuelve a
+     ejecutar el test para confirmar que sigue pasando.
+  6. Se repite el ciclo agregando casos más complejos (decimales,
+     negativos, conmutatividad a+b == b+a, etc.).
+
+Este ejemplo se implementó como código real en
+src/main/java/dosw/slides_s05_tdd/ — ver más abajo.
+
+Qué tener en cuenta: es importante volver a pasar TODOS los tests
+después de refactorizar, por si se rompió algo que antes funcionaba.
+
+
+8. DISEÑO DE ESCENARIOS DE PRUEBA (diapositivas 57-62)
+--------------------------------------------------------------
+Criterios de aceptación: condiciones que una funcionalidad debe
+cumplir para considerarse terminada (Definition of Done), escritas
+desde la perspectiva del usuario, medibles y verificables.
+
+Principios de las pruebas (destacados):
+  - Las pruebas demuestran la PRESENCIA de defectos, no su ausencia.
+  - El testing exhaustivo no es posible (no se pueden probar todas
+    las combinaciones).
+  - Las pruebas tempranas ahorran tiempo/dinero.
+  - Agrupación de defectos: 80% de las consecuencias vienen del 20%
+    de las causas.
+  - Paradoja del pesticida: repetir las mismas pruebas no mantiene su
+    efectividad — hay que variarlas/actualizarlas.
+  - El testing depende del contexto (un sistema médico se prueba
+    distinto a un e-commerce).
+
+Partes de una prueba (AAA):
+  - Arrange: preparar el escenario (objetos, datos, mocks).
+  - Act: ejecutar la acción que se prueba.
+  - Assert: validar el resultado contra lo esperado.
+
+Buenas pruebas: rápidas de ejecutar y de escribir, sin depender de
+elementos externos ni de otras pruebas unitarias.
+
+
+9. COBERTURA DE PRUEBAS (diapositivas 63-70)
+--------------------------------------------------
+Qué es: mide cuánto código fue ejercitado por los tests. Un buen
+nivel de cobertura indica calidad de las PRUEBAS, pero NUNCA garantiza
+la calidad del SISTEMA ni que todo esté probado.
+
+JUnit: framework de pruebas unitarias más usado en Java. Anotaciones
+@Test, @BeforeEach, @AfterEach. Ejecuta pruebas aisladas, verifica con
+asserts. Se integra con Maven/Gradle/CI-CD. En Maven: `mvn test`.
+
+JaCoCo: mide la cobertura del código de las pruebas (qué líneas/
+ramas/métodos se ejecutaron). Se ejecuta junto a JUnit. En Maven:
+`mvn test`, reporte en target/site/jacoco/index.html.
+
+SonarQube: análisis estático de código — detecta bugs, code smells,
+vulnerabilidades, cobertura, duplicación. Se integra con CI/CD.
+
+
+10. MOCKS Y STUBS (diapositivas 71-76)
+--------------------------------------------
+Mocks: objetos que registran las llamadas a sus métodos y validan que
+ocurrieron las interacciones esperadas (verifican qué se llamó, en
+qué orden y cuántas veces). Ideales para "behavior testing"
+(comportamiento). Ventaja: detectan efectos colaterales ocultos.
+Desventaja: uso excesivo genera tests frágiles y acoplados a la
+implementación.
+
+Stubs: componentes que devuelven respuestas predefinidas (como un
+actor con guion). Ideales para "state testing" (lo importante es el
+resultado, no la interacción). Ventaja: aíslan la unidad bajo prueba.
+Desventaja: mal configurados dan falsa sensación de que todo está
+correcto.
+
+Buenas prácticas: equilibrar Stubs y Mocks según lo que se está
+probando (resultado vs. interacción); evitar tests demasiado
+específicos (frágiles ante cambios pequeños); mantener los tests
+claros y simples; en TDD, Mocks/Stubs permiten probar antes de tener
+la implementación real. Se mencionó el uso con Mockito.
+
+
+EJEMPLO PROPIO: TDD de una calculadora (código en Java)
+-----------------------------------------------------------------
+Siguiendo el ciclo ROJO-VERDE-REFACTOR del docx, se implementó y
+documentó el ejemplo de la calculadora en:
+  src/main/java/dosw/slides_s05_tdd/Calculadora.java
+  src/main/java/dosw/slides_s05_tdd/CalculadoraTest.java
+
+Casos cubiertos (siguiendo la progresión sugerida en la diapositiva
+56): suma de enteros positivos, decimales, números negativos, y
+conmutatividad (a+b == b+a). Ver el javadoc de cada test para el
+detalle de qué escenario cubre cada uno.
+
+Para ejecutar solo estas pruebas: `mvn test -Dtest=CalculadoraTest`
