@@ -1,13 +1,18 @@
 # Bitácora — DOSW
 
 Repositorio personal de la asignatura DOSW (Java + Streams + Expresiones
-Lambda + Git/GitHub). Contiene el Lab01 (Hackathon Express) en `Lab01/` y
-el Taller 2 — Bitácora Pokémon — organizado como proyecto Maven en `src/`.
+Lambda + Git/GitHub + Patrones de diseño + Planeación ágil). Entrega del
+Corte #1: contiene exclusivamente el desarrollo de los talleres pedidos:
+
+- **Taller #2 — Bitácora Pokémon**: proyecto Maven en `src/main/java/dosw/semana_1` y `semana_2` (ver detalle completo más abajo en este mismo README).
+- **Taller #4 — Patrones de Diseño Combinados**: `src/main/java/dosw/taller4_patrones/` (10 ejercicios, cada uno combina 2 patrones) — ver [`Talleres/TALLER_DOSW_4_explicacion.txt`](Talleres/TALLER_DOSW_4_explicacion.txt).
+- **Taller #6 — Planeación Ágil TechCup**: [`Talleres/TALLER_6_Planeacion_Agil_TechCup.md`](Talleres/TALLER_6_Planeacion_Agil_TechCup.md) (épica, features, tareas, sprints y diagrama C4 listos para Jira).
 
 ```bash
 mvn compile                                          # compila todo el proyecto
 java -cp target/classes dosw.semana_1.streams.EjercicioN
 java -cp target/classes dosw.semana_2.pokemon.EjercicioNN
+java -cp target/classes dosw.taller4_patrones.ejercicioNN_tema.Main
 ```
 
 > Nota técnica: el enunciado pide la ruta `src/main/dosw/...`, pero la
