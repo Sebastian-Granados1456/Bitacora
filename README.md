@@ -6,10 +6,10 @@ Corte #1: contiene exclusivamente el desarrollo de los talleres pedidos:
 
 - **Taller #2 — Bitácora Pokémon**: proyecto Maven en `src/main/java/dosw/semana_1` y `semana_2` (ver detalle completo más abajo en este mismo README).
 - **Taller #4 — Patrones de Diseño Combinados**: `src/main/java/dosw/taller4_patrones/` (10 ejercicios, cada uno combina 2 patrones) — ver [`Talleres/TALLER_DOSW_4_explicacion.txt`](Talleres/TALLER_DOSW_4_explicacion.txt).
-- **Taller #6 — Planeación Ágil TechCup**: [`Talleres/TALLER_6_Planeacion_Agil_TechCup.md`](Talleres/TALLER_6_Planeacion_Agil_TechCup.md) (épica, features, tareas, sprints y diagrama C4 listos para Jira).
+- **Taller #6 — Planeación Ágil TechCup**: proyecto Jira "TechCup DOSW" (clave `TCH`) con épica, 17 features, sprints configurados y capturas en [`Talleres/capturas_taller6/`](Talleres/capturas_taller6/).
 
 ```bash
-mvn compile                                          # compila todo el proyecto
+mvn compile                                    
 java -cp target/classes dosw.semana_1.streams.EjercicioN
 java -cp target/classes dosw.semana_2.pokemon.EjercicioNN
 java -cp target/classes dosw.taller4_patrones.ejercicioNN_tema.Main
@@ -28,11 +28,6 @@ java -cp target/classes dosw.taller4_patrones.ejercicioNN_tema.Main
 
 > Los 5 ejercicios de esta semana vienen de la diapositiva **"DOSW 1 - S02.pptx"** (sección "Ejercicios de Repaso", diapositivas 2-6), tal como pide la Tarea #1 de esa misma presentación.
 
-## Datos personales:
-- Nombre y Apellido:
-- Código de Estudiante:
-- Curso:
-
 ---
 
 ### Ejercicio 01 — Números Pares mayores a diez
@@ -40,8 +35,6 @@ Dada una lista de números enteros, obtener una nueva lista solo con los
 números pares mayores a 10.
 
 **Código implementado:** [`src/main/java/dosw/semana_1/streams/Ejercicio1.java`](src/main/java/dosw/semana_1/streams/Ejercicio1.java)
-
-**Captura de ejecución:** _(pendiente — adjuntar imagen de la consola)_
 
 **Explicación:** se usa `filter()` con una lambda que combina las dos
 condiciones (par y mayor a 10) y `collect()` para construir la lista
@@ -53,8 +46,6 @@ ordenarlas alfabéticamente y contar cuántas quedan.
 
 **Código implementado:** [`src/main/java/dosw/semana_1/streams/Ejercicio2.java`](src/main/java/dosw/semana_1/streams/Ejercicio2.java)
 
-**Captura de ejecución:** _(pendiente)_
-
 **Explicación:** `filter()` descarta las palabras cortas, `map()` las
 transforma a mayúsculas y `sorted()` las ordena; `count()` sobre el mismo
 filtro da la cantidad final de palabras resultantes.
@@ -65,8 +56,6 @@ ordenarlos alfabéticamente.
 
 **Código implementado:** [`src/main/java/dosw/semana_1/streams/Ejercicio3.java`](src/main/java/dosw/semana_1/streams/Ejercicio3.java) (usa [`Usuario.java`](src/main/java/dosw/semana_1/streams/Usuario.java))
 
-**Captura de ejecución:** _(pendiente)_
-
 **Explicación:** `filter(Usuario::active)` se queda con los activos,
 `map()` extrae el nombre en mayúscula y `sorted()` ordena el resultado.
 
@@ -75,8 +64,6 @@ Con los mismos atributos de Usuario, filtrar los mayores de edad y
 obtener sus nombres.
 
 **Código implementado:** [`src/main/java/dosw/semana_1/streams/Ejercicio4.java`](src/main/java/dosw/semana_1/streams/Ejercicio4.java)
-
-**Captura de ejecución:** _(pendiente)_
 
 **Explicación:** `filter()` con la condición `age >= 18` y `map()` para
 quedarse solo con el nombre de cada usuario que cumple.
@@ -87,8 +74,6 @@ Procesar una lista de transacciones usando `peek()` para verlas y
 
 **Código implementado:** [`src/main/java/dosw/semana_1/streams/Ejercicio5.java`](src/main/java/dosw/semana_1/streams/Ejercicio5.java) (usa [`Transaction.java`](src/main/java/dosw/semana_1/streams/Transaction.java))
 
-**Captura de ejecución:** _(pendiente)_
-
 **Explicación:** `peek()` imprime cada transacción a medida que el stream
 la procesa, y `anyMatch()` evalúa si alguna tiene `approved == false`; el
 lote es válido solo si ninguna transacción falla esa condición.
@@ -96,11 +81,6 @@ lote es válido solo si ninguna transacción falla esa condición.
 ---
 
 # SEMANA No 2 — Bitácora Pokémon
-
-## Datos de Entrenador:
-- Nombre y Apellido:
-- Código de Estudiante:
-- Curso:
 
 ---
 
@@ -202,20 +182,20 @@ Resumen completo: por tipo, por región, legendarios, promedio de nivel y el má
 
 ## Retos Especiales
 
-- [x] **Reto Legendario — Method References:** se usan en más de 5
-  ejercicios (`Ejercicio02` con `String::toUpperCase`, `Ejercicio08` con
-  `PokemonSimple::puedeEvolucionar`, `Ejercicio10` con `Pokemon::getNombre`,
-  `Ejercicio12` con `Pokemon::getPoderCombate`, `Ejercicio15` con
-  `EntrenadorSimple::medallas`, `Ejercicio20` con `Pokemon::isLegendario`,
-  entre otros) en lugar de lambdas explícitas.
-- [x] **Reto Shiny — Buenas prácticas de commits:** el desarrollo se hizo
-  en tandas pequeñas, cada una cerrada con un commit descriptivo
-  (`feat:`/`refactor:`/`docs:`) — ver historial de `git log`.
-- [ ] **Reto Mewtwo — Ejercicio propuesto:** pendiente (opcional).
+**Reto Legendario — Method References:** se usan en más de 5
+ejercicios (`Ejercicio02` con `String::toUpperCase`, `Ejercicio08` con
+`PokemonSimple::puedeEvolucionar`, `Ejercicio10` con `Pokemon::getNombre`,
+`Ejercicio12` con `Pokemon::getPoderCombate`, `Ejercicio15` con
+`EntrenadorSimple::medallas`, `Ejercicio20` con `Pokemon::isLegendario`,
+entre otros) en lugar de lambdas explícitas.
+
+**Reto Shiny — Buenas prácticas de commits:** el desarrollo se hizo
+en tandas pequeñas, cada una cerrada con un commit descriptivo
+(`feat:`/`refactor:`/`docs:`) — ver historial de `git log`.
 
 ---
 
-## ⚔️ Estrategia de Ramas (Git Flow)
+## Estrategia de Ramas (Git Flow)
 
 Este repositorio mantiene `main` y `develop` como ramas principales. El
 trabajo de cada semana se hace en `feature/semana-n-dosw`, y cada
@@ -224,10 +204,10 @@ de la semana al terminar y hacia `develop` mediante Pull Request al cerrar
 toda la semana. Las ramas semanales no se eliminan tras el merge — quedan
 como evidencia del proceso.
 
-## ⚔️ Reglas del Torneo
+## Reglas del Torneo
 
-- ✗ Prohibido usar bucles tradicionales (`for`, `while`, `do-while`) para
+- Prohibido usar bucles tradicionales (`for`, `while`, `do-while`) para
   resolver los ejercicios, ordenar manualmente o recorrer colecciones de
   forma imperativa.
-- ✓ Obligatorio usar únicamente Streams y Lambdas, documentar cada
+- Obligatorio usar únicamente Streams y Lambdas, documentar cada
   ejercicio en este README y subir evidencia de ejecución por reto.
